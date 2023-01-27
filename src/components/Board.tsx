@@ -5,16 +5,16 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from './Board.module.css';
 import { Task } from './Task';
 
-const initialStateTask = [ {
-  id: '',
-  content: '',
-  isChecked: false
-}]
+interface TaskProps {
+  id: string;
+  content: string;
+  isChecked: boolean;
+}
 
 export function Board() {
 
   const [placeholderText, setPlaceholderText] = useState("Adicione uma nova tarefa");
-  const [tasks, setTasks] = useState(initialStateTask);
+  const [tasks, setTasks] = useState<TaskProps[]>([]);
 
   const [newTaskText, setNewTaskText] = useState('');
 
@@ -41,10 +41,7 @@ export function Board() {
     event.preventDefault();
     let objeto = {id: uuidv4(), content: newTaskText, isChecked: false};
     
-    if (tasks.some(t => t.id === ''))
-      setTasks([objeto]);
-    else
-      setTasks([...tasks, objeto]);
+    setTasks([...tasks, objeto]);
 
     setNewTaskText('');
   }
@@ -54,10 +51,7 @@ export function Board() {
       return task.id !== taskToDelete;
     });
     
-    if (!tasksWithoutDeletedOne.length)
-      setTasks(initialStateTask);
-    else
-      setTasks(tasksWithoutDeletedOne);
+    setTasks(tasksWithoutDeletedOne);
   }
 
   function updateDoneTasks(taskId: string) {
